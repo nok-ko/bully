@@ -1,6 +1,6 @@
 import {parse} from '../../lib/booleanExpressionParser';
 import {varNames} from "../table/tableFns.ts";
-import Tracer from 'pegjs-backtrace';
+// import Tracer from 'pegjs-backtrace';
 
 // evalExpr(expr: string, row: bool[]): bool[] //(column) | EvalFailure
 
@@ -48,16 +48,28 @@ function evalNode(node: Parser.Node, bindings: VariableBindings): boolean {
 				return !evalNode(node.invertend, bindings)
 		}
 	}
+	// Can you even get here with correct inputs?
+	return true;
 }
 
+/**
+ * Run a user-supplied expression on a row of input values.
+ * Return the result, or throw an error if the expression could not be parsed.
+ * @param expression
+ * @param row
+ * A row of values. The first value is the value of the variable "A", then "B"
+ * and so on.
+ */
 export function evalExpression(expression: string, row: boolean[]): boolean | EvalFailure {
 	// const tracer = new Tracer(expression, {showTrace: false, showFullPath: false});
 	try {
+		// Convert the input row into a nicer form, like:
+		// {A: true, B: false}, etc.
 		const bindings = rowToBindings(row);
-		const tree: Parser.Node = parse(expression, /* {tracer} */) as Parser.Node;
+		const tree: Parser.Node = parse(expression, { /* tracer */ }) as Parser.Node;
 		return evalNode(tree, bindings);
 	} catch (e) {
-		console.log(tracer.getBacktraceString())
+		// console.log(tracer.getBacktraceString())
 		throw e;
 	}
 }
