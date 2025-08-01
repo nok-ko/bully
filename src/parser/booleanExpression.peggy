@@ -1,16 +1,3 @@
-{{
-  function makeInteger(o) {
-    return parseInt(o.join(""), 10);
-  }
-}}
-
-{
-  if (options.multiplier) {
-    input = `(${input})*(${options.multiplier})`;
-  }
-  input = input.replace(/\s/g,'')
-}
-
 // 1. Variables
 // 1.5. (bonus points - literals)
 // 2. OR (+)
