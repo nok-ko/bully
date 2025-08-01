@@ -1,43 +1,59 @@
-// 1. Variables
-// 1.5. (bonus points - literals)
-// 2. OR (+)
-// 3. AND {var}{var}
-// 4. unary not {var}'
-// 5. parens
+// Per-parse instruction.
+// This block runs before each parse.
+{
+  // Strip whitespace from the input:
+  input = input.replace(/\s/g,'')
+}
 
-// sum - {product} + {product}
-// product - AB, A'B'C'
-// (AB + C)'
-
-
+// Root expression, starts parsing:
 start
   = sum
   / '' { return {} }
 
+// At the top level, look for sums, then bare product expressions:
 sum
   = left:product "+" right:sum { return {op: 'or', left, right}; }
   / product
 
+// Products can be written either with an asterisk or implicitly by mashing two
+// terms together
 product
-  = left:primary "*" right:product { return {op: 'and', left, right}; }
-  / left:primary right:product {return {op: 'and', left, right};}
-  / primary
+  = left:term "*" right:product { return {op: 'and', left, right}; }
+  / left:term right:product {return {op: 'and', left, right};}
+  / term
 
-primary
+// A term is either:
+term
+  // A value with any number of NOTs after it:
   = invertend:value nots:"'"+ {
     return (nots.length % 2 == 1 ? {op: 'not', invertend} : invertend)
   }
+  // A bare value:
   / value
+  // A sum with any number of NOTs after it:
   / "(" inverted_sum:sum ")" nots:"'"+ {
     return (nots.length % 2 == 1 ? {op: 'not', invertend: inverted_sum} : inverted_sum)
   }
+  // A sum in parentheses:
   / "(" sum:sum ")" { return sum; }
 
+
+/// Bottom types:
+
+// A value is:
 value
-  = "true" { return {val: true} }
-  / "false" { return {val: false} }
+  // A literal:
+  = literal
+  // A variable binding:
   / variable
 
+literal
+  // A literal `false`
+  = "false" { return {val: false} }
+  // A literal `true`
+  / "true" { return {val: true} }
 
-variable "variable binding"
-  = name:[A-Z] { return {var: name}; }
+// A variable is:
+variable "variable"
+  // Just a single uppercase letter:
+  = name:[A-Z] { return {"var": name}; }
