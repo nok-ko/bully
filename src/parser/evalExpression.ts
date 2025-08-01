@@ -43,7 +43,7 @@ function evalNode(node: Parser.Node, bindings: VariableBindings): boolean {
 	// Base case: handle the bottom types:
 	if ('var' in node) {
 		/** @var {Parser.Var} node */
-		return bindings[node.var]
+		return bindings[ node['var'] ]
 	} else if ('val' in node) {
 		/** @var {Parser.Value} node */
 		return node.val
