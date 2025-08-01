@@ -1,4 +1,4 @@
-import {parse} from '../../lib/booleanExpressionParser.ts';
+import {parse} from '../../lib/booleanExpressionParser';
 import {varNames} from "../table/tableFns.ts";
 // import Tracer from 'pegjs-backtrace';
 

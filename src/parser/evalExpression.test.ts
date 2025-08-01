@@ -1,5 +1,5 @@
 import {expect, describe, it, beforeEach} from "vitest";
-import {parse} from '../../lib/booleanExpressionParser.ts';
+import {parse} from '../../lib/booleanExpressionParser';
 import {evalExpression, Parser, rowToBindings} from "./evalExpression.ts";
 
 describe('Boolean Expression Parsing', () => {
