@@ -15,7 +15,7 @@ export function TruthTableHeader(props: TruthTableHeaderParams): JSX.Element {
 		throw new Error(`Cannot display ${props.baseVariableCount} base variables in header!`);
 	}
 
-	const colCount = props.baseVariableCount + props.extraCols.length;
+	// const colCount = props.baseVariableCount + props.extraCols.length;
 
 	return <thead>
 	<tr>

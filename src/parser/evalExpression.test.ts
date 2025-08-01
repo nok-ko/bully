@@ -1,4 +1,4 @@
-import {expect, describe, it, beforeEach, afterEach} from "vitest";
+import {expect, describe, it, beforeEach} from "vitest";
 import {parse} from '../../lib/booleanExpressionParser';
 import {evalExpression, Parser, rowToBindings} from "./evalExpression.ts";
 

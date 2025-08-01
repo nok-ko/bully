@@ -4,6 +4,11 @@
 export type Table = boolean[][];
 
 /**
+ * Generate a table of size 1x`length` and filled with false values.
+ */
+export const blankColumn = (length: number): Table => Array(length).fill([false])
+
+/**
  * Generate the "base" truth table, simply listing example values for a number
  * of Boolean variables given by `width`.
  * @param width
