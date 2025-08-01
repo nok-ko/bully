@@ -61,9 +61,3 @@ export const varNames
 	= new Array( 26 ).fill( 1 ).map( ( _, i ) => String.fromCharCode( 65 + i ) );
 
 type VarBindings = { [name: string]: boolean };
-
-export function evalExpr(expr: string, variables: VarBindings): Table {
-	return [];
-}
-
-

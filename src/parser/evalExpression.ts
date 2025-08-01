@@ -51,10 +51,10 @@ function evalNode(node: Parser.Node, bindings: VariableBindings): boolean {
 }
 
 export function evalExpression(expression: string, row: boolean[]): boolean | EvalFailure {
-	const tracer = new Tracer(expression, {showTrace: false, showFullPath: false});
+	// const tracer = new Tracer(expression, {showTrace: false, showFullPath: false});
 	try {
 		const bindings = rowToBindings(row);
-		const tree: Parser.Node = parse(expression, {tracer}) as Parser.Node;
+		const tree: Parser.Node = parse(expression, /* {tracer} */) as Parser.Node;
 		return evalNode(tree, bindings);
 	} catch (e) {
 		console.log(tracer.getBacktraceString())

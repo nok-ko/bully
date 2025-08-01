@@ -15,7 +15,8 @@ type TruthTableData = {
 
 export default function TruthTable({width}: { width: number }) {
 
-	const [inputExpr, setInputExpr] = useState<string>('');
+	const [inputExpr, setInputExpr] = useState<string>('false');
+	const [columnExprs, setColumnExprs] = useState<string[]>([]);
 
 	const evaluatedColumn: null | Table = null;
 
@@ -37,22 +38,56 @@ export default function TruthTable({width}: { width: number }) {
 
 	const evaluated = exprColumn(inputExpr, referenceTable)
 
-	function generateRows(): Table {
+	function generateRows(base: Table, extraCols: Table[]): Table {
+		debugger;
+		if (!extraCols.length) return base;
+		if (extraCols.length === 1) {
+			return augmentTable(
+				base,
+				extraCols[0],
+			)
+		}
+
 		return augmentTable(
-			referenceTable,
-			// Extra rows
-			evaluated,
-		);
+			generateRows(
+				base,
+				extraCols.slice(0,-1)
+			),
+			extraCols.at(-1),
+		)
+	}
+
+	// function generateRows(): Table {
+	// 	return augmentTable(
+	// 		augmentTable(
+	// 			referenceTable,
+	// 			// Extra columns
+	// 			exprColumn(columnExprs[0], referenceTable),
+	// 		),
+	// 		// input
+	// 		exprColumn(inputExpr, referenceTable),
+	// 	)
+	// }
+
+	function onNewCol() {
+		setColumnExprs(existing => existing.concat(inputExpr));
+		setInputExpr('');
 	}
 
 	return <table>
 		<TruthTableHeader
 			baseVariableCount={baseVariableCount}
 			onChange={(event) => setInputExpr(event.target.value)}
+			onNewCol={onNewCol}
 			inputExpr={inputExpr}
-			extraCols={[]}
+			extraCols={columnExprs}
 		/>
-		<TruthTableBody rows={generateRows()}/>
+		<TruthTableBody rows={
+			augmentTable(
+				generateRows(referenceTable, columnExprs.map((expr) => exprColumn(expr, referenceTable))),
+				exprColumn(inputExpr,referenceTable)
+			)
+		}/>
 	</table>
 
 }
