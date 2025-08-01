@@ -12,8 +12,6 @@ export type Table = boolean[][];
  */
 export function generateReferenceTable(width: number): Table {
 	const rowLimit = (2**width);
-	let table = [];
-
 	if (!Number.isSafeInteger(rowLimit)) {
 		console.warn(`Probably a bad idea to generate a ${width}-wide table.`)
 	}
