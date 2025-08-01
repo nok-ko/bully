@@ -33,18 +33,33 @@ export function rowToBindings(row: boolean[]): VariableBindings {
 	)
 }
 
+/**
+ * Recursively evaluate a parse tree, given the specified variable bindings.
+ *
+ * @param node
+ * @param bindings
+ */
 function evalNode(node: Parser.Node, bindings: VariableBindings): boolean {
+	// Base case: handle the bottom types:
 	if ('var' in node) {
+		/** @var {Parser.Var} node */
 		return bindings[node.var]
 	} else if ('val' in node) {
+		/** @var {Parser.Value} node */
 		return node.val
-	} else if ('op' in node) {
+	}
+
+	// Handle the operation nodes:
+	if ('op' in node) {
 		switch (node.op) {
 			case 'and':
+				/** @var {Parser.AndOp} node */
 				return evalNode(node.left, bindings) && evalNode(node.right, bindings)
 			case 'or':
+				/** @var {Parser.OrOp} node */
 				return evalNode(node.left, bindings) || evalNode(node.right, bindings)
 			case 'not':
+				/** @var {Parser.InvertOp} node */
 				return !evalNode(node.invertend, bindings)
 		}
 	}
