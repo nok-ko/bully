@@ -54,8 +54,16 @@ export function augmentTable(left: Table, right: Table): Table {
 	);
 }
 
-// (Ascii 65 = 'A')
-export const varNames
-	= new Array( 26 ).fill( 1 ).map( ( _, i ) => String.fromCharCode( 65 + i ) );
-
-type VarBindings = { [name: string]: boolean };
+/**
+ * Constant array with the uppercase Latin alphabet, used for variable bindings:
+ */
+export const varNames: string[]
+	// Array of 26 empty slots:
+	= new Array(26)
+	.fill(1) // Filled with something. (Can be any value, will be overwritten.)
+	// Transformed:
+	.map(
+		// Each element turns into ASCII 65 ('A') plus the index at which it is
+		// located in the array:
+		(_, index) => String.fromCharCode(65 + index)
+	);
