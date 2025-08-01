@@ -26,7 +26,7 @@ export namespace Parser {
 /**
  * An object binding Boolean values to variable names.
  */
-type VariableBindings = Record<string, boolean>;
+export type VariableBindings = { [name: string]: boolean };
 
 /**
  * Zip a row of boolean values together with the canonical list of variable
