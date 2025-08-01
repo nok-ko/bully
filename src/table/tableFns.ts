@@ -1,7 +1,3 @@
-// generateReferenceTable(width: number)
-// evalExpr(expr: string, row: bool[]): bool[] //(column) | EvalFailure
-// augmentTables(leftTable: bool[][], rightTable: bool[][]): bool[][]
-
 /**
  * A table of boolean values.
  */
@@ -60,7 +56,9 @@ export function augmentTable(left: Table, right: Table): Table {
 	);
 }
 
-export const varNames = ['A', 'B', 'C', 'D'];
+// (Ascii 65 = 'A')
+export const varNames
+	= new Array( 26 ).fill( 1 ).map( ( _, i ) => String.fromCharCode( 65 + i ) );
 
 type VarBindings = { [name: string]: boolean };
 

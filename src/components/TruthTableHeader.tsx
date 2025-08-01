@@ -6,7 +6,7 @@ type TruthTableHeaderParams = {
 	baseVariableCount: number,
 	extraCols: string[],
 	inputExpr: string,
-	onInput: React.FormEventHandler<HTMLInputElement>
+	onChange: React.ChangeEventHandler<HTMLInputElement>
 };
 
 export function TruthTableHeader(props: TruthTableHeaderParams): JSX.Element {
@@ -20,7 +20,7 @@ export function TruthTableHeader(props: TruthTableHeaderParams): JSX.Element {
 	<tr>
 		{varNames.slice(0,props.baseVariableCount).map(varName => <td key={varName}>{varName}</td>)}
 		{/* user-defined columns TODO */}
-		<td><input value={props.inputExpr} onInput={props.onInput}/></td>
+		<td><input value={props.inputExpr} onChange={props.onChange}/></td>
 	</tr>
 	</thead>;
 }

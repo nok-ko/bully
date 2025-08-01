@@ -1,5 +1,13 @@
+{{
+  function makeInteger(o) {
+    return parseInt(o.join(""), 10);
+  }
+}}
+
 {
-  // Strip out whitespace:
+  if (options.multiplier) {
+    input = `(${input})*(${options.multiplier})`;
+  }
   input = input.replace(/\s/g,'')
 }
 
@@ -33,6 +41,9 @@ primary
     return (nots.length % 2 == 1 ? {op: 'not', invertend} : invertend)
   }
   / value
+  / "(" inverted_sum:sum ")" nots:"'"+ {
+    return (nots.length % 2 == 1 ? {op: 'not', invertend: inverted_sum} : inverted_sum)
+  }
   / "(" sum:sum ")" { return sum; }
 
 value

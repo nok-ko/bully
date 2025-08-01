@@ -3,6 +3,7 @@ import './TruthTable.less';
 import TruthTableBody from "./TruthTableBody.tsx";
 import {augmentTable, generateReferenceTable, Table} from "../table/tableFns.ts";
 import {useState} from "react";
+import {evalExpression} from "../parser/evalExpression.ts";
 
 type VariableIdentifier = 'A' | 'B' | 'C' | 'D';
 
@@ -24,19 +25,30 @@ export default function TruthTable({width}: { width: number }) {
 
 	const blankColumn = (length) => Array(length).fill([false])
 
+	function exprColumn(expression: string, bindingTable: Table): Table {
+		try {
+			return bindingTable.map(
+				(row) => [evalExpression(expression,row)]
+			)
+		} catch (e) {
+			return blankColumn(bindingTable.length);
+		}
+	}
+
+	const evaluated = exprColumn(inputExpr, referenceTable)
+
 	function generateRows(): Table {
 		return augmentTable(
 			referenceTable,
-			evaluatedColumn === null
-				? blankColumn(2 ** baseVariableCount)
-				: evaluatedColumn
+			// Extra rows
+			evaluated,
 		);
 	}
 
 	return <table>
 		<TruthTableHeader
 			baseVariableCount={baseVariableCount}
-			onInput={(event) => setInputExpr('foo')}
+			onChange={(event) => setInputExpr(event.target.value)}
 			inputExpr={inputExpr}
 			extraCols={[]}
 		/>

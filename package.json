@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "make-parser": "peggy -o lib/booleanExpressionParser.ts --format es --dts src/parser/booleanExpression.peggy"
+    "make-parser": "peggy -o lib/booleanExpressionParser.ts --format es --dts src/parser/booleanExpression.peggy",
+    "make-dev-parser": "peggy -o lib/booleanExpressionParser.ts --format es --dts --trace src/parser/booleanExpression.peggy"
   },
   "dependencies": {
     "peggy": "^4.2.0",
@@ -29,6 +30,7 @@
     "globals": "^16.0.0",
     "jsdom": "^26.1.0",
     "less": "^4.3.0",
+    "pegjs-backtrace": "^0.2.1",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1",
