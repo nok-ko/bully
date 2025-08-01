@@ -39,7 +39,6 @@ export default function TruthTable({width}: { width: number }) {
 	const evaluated = exprColumn(inputExpr, referenceTable)
 
 	function generateRows(base: Table, extraCols: Table[]): Table {
-		debugger;
 		if (!extraCols.length) return base;
 		if (extraCols.length === 1) {
 			return augmentTable(
