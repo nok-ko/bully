@@ -23,9 +23,36 @@ export namespace Parser {
 }
 
 
+/**
+ * An object binding Boolean values to variable names.
+ */
 type VariableBindings = Record<string, boolean>;
 
+/**
+ * Zip a row of boolean values together with the canonical list of variable
+ * names A-Z.
+ *
+ * @param row
+ * A row of Boolean values. Only the first 26 values are used, a warning is
+ * logged to the console if more are supplied.
+ *
+ * @return {VariableBindings}
+ * An object with variable name keys and values taken from the row, in
+ * alphabetical order.
+ */
 export function rowToBindings(row: boolean[]): VariableBindings {
+	const lengthLimit = varNames.length;
+	if (row.length > lengthLimit) {
+		console.group('rowToBindings: Input row too big!')
+		console.warn(
+			`Got ${row.length} input values - cannot map them to the ${lengthLimit} `
+		+ `available variable names.`
+		);
+		console.warn(`Trimming away ${row.length - lengthLimit} value(s)!`);
+		console.groupEnd();
+		row = row.slice(0, lengthLimit);
+	}
+
 	return Object.fromEntries(
 		row.map(
 			(value, index) => [varNames[index], value]
@@ -39,7 +66,7 @@ export function rowToBindings(row: boolean[]): VariableBindings {
  * @param node
  * @param bindings
  */
-function evalNode(node: Parser.Node, bindings: VariableBindings): boolean {
+export function evaluateTree(node: Parser.Node, bindings: VariableBindings): boolean {
 	// Base case: handle the bottom types:
 	if ('var' in node) {
 		/** @var {Parser.Var} node */
@@ -54,16 +81,16 @@ function evalNode(node: Parser.Node, bindings: VariableBindings): boolean {
 		switch (node.op) {
 			case 'and':
 				/** @var {Parser.AndOp} node */
-				return evalNode(node.left, bindings) && evalNode(node.right, bindings)
+				return evaluateTree(node.left, bindings) && evaluateTree(node.right, bindings)
 			case 'or':
 				/** @var {Parser.OrOp} node */
-				return evalNode(node.left, bindings) || evalNode(node.right, bindings)
+				return evaluateTree(node.left, bindings) || evaluateTree(node.right, bindings)
 			case 'not':
 				/** @var {Parser.InvertOp} node */
-				return !evalNode(node.invertend, bindings)
+				return !evaluateTree(node.invertend, bindings)
 		}
 	}
-	// Can you even get here with correct inputs?
+	// Can you even get here with correct inputs? TODO: fix?
 	return true;
 }
 
@@ -78,11 +105,13 @@ function evalNode(node: Parser.Node, bindings: VariableBindings): boolean {
 export function evalExpression(expression: string, row: boolean[]): boolean | EvalFailure {
 	// const tracer = new Tracer(expression, {showTrace: false, showFullPath: false});
 	try {
-		// Convert the input row into a nicer form, like:
-		// {A: true, B: false}, etc.
-		const bindings = rowToBindings(row);
 		const tree: Parser.Node = parse(expression, { /* tracer */ }) as Parser.Node;
-		return evalNode(tree, bindings);
+		return evaluateTree(
+			tree,
+			// We have to convert the input row into an object defining the variable
+			// bindings, {A: true, B: false}, etc:
+			rowToBindings(row)
+		);
 	} catch (e) {
 		// console.log(tracer.getBacktraceString())
 		throw e;

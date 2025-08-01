@@ -1,4 +1,4 @@
-import {expect, describe, it} from "vitest";
+import {expect, describe, it, beforeEach, afterEach} from "vitest";
 import {parse} from '../../lib/booleanExpressionParser';
 import {evalExpression, Parser, rowToBindings} from "./evalExpression.ts";
 
@@ -91,15 +91,39 @@ describe('Boolean Expression Parsing', () => {
 })
 
 describe('rowToBindings', () => {
-	it('Binds just A', () => {
-		expect(
-			rowToBindings([true, false, false, false])
-		).toEqual({
+	// Basic mock for the console:
+	const consoleMock = {
+		...console,
+		warn: vi.fn(),
+		group: vi.fn(),
+		groupEnd: vi.fn(),
+	};
+
+	beforeEach(() => {
+		// Reset test state:
+		vi.unstubAllGlobals();
+		vi.resetAllMocks();
+
+		// Mock the console object:
+		vi.stubGlobal('console', consoleMock);
+	})
+
+	it('successfully binds four values', () => {
+		const bindings = rowToBindings([true, false, false, false]);
+		expect(bindings, 'Equal a reference value.').toEqual({
 			'A': true,
 			'B': false,
 			'C': false,
 			'D': false,
 		})
+		expect(consoleMock.warn, 'No warnings should be logged.').to.not.toHaveBeenCalled()
+	})
+
+	it('binds >26 values by trimming the input to size', () => {
+		const bindings = rowToBindings(new Array(27).fill(false))
+		expect(consoleMock.warn, 'Warnings should be logged.').toBeCalled();
+		expect(bindings, 'Z should be bound').toHaveProperty('Z')
+		expect(Object.keys(bindings).length, 'Exactly 26 values should be bound.').toEqual(26)
 	})
 });
 
