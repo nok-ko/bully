@@ -1,13 +1,26 @@
 import {JSX} from "react";
+import {varNames} from "../table/tableFns.ts";
+import * as React from "react";
 
-export function TruthTableHeader(_props?: any): JSX.Element {
+type TruthTableHeaderParams = {
+	baseVariableCount: number,
+	extraCols: string[],
+	inputExpr: string,
+	onInput: React.FormEventHandler<HTMLInputElement>
+};
+
+export function TruthTableHeader(props: TruthTableHeaderParams): JSX.Element {
+	if (props.baseVariableCount > varNames.length) {
+		throw new Error(`Cannot display ${props.baseVariableCount} base variables in header!`);
+	}
+
+	const colCount = props.baseVariableCount + props.extraCols.length;
+
 	return <thead>
 	<tr>
-		<td>A</td>
-		<td>B</td>
-		<td>C</td>
-		<td>D</td>
-		<td><input/></td>
+		{varNames.slice(0,props.baseVariableCount).map(varName => <td key={varName}>{varName}</td>)}
+		{/* user-defined columns TODO */}
+		<td><input value={props.inputExpr} onInput={props.onInput}/></td>
 	</tr>
 	</thead>;
 }

@@ -6,7 +6,7 @@ import TruthTable from "./components/TruthTable.tsx";
 
 function App() {
   return (
-		<TruthTable/>
+		<TruthTable width={4}/>
   )
 }
 
