@@ -4,7 +4,9 @@ Truth tables for the world!
 
 ## What?
 
-This is **Bully**, my little Boolean expression calculator. I’d made [a similar project](https://github.com/nok-ko/boole) in college while studying for a discrete math final, and decided to port my efforts to a TypeScript and React shell while learning a bit more about parsers. (The old one used a couple of regular expressions and `eval()`. _I know._) Try it on Vercel!
+This is **Bully**, my little Boolean expression calculator. I’d made [a similar project](https://github.com/nok-ko/boole) in college while studying for a discrete math final, and decided to port my efforts to a TypeScript and React shell while learning a bit more about parsers. (The old one used a couple of regular expressions and `eval()`. _I know._) 
+
+[Try it on Vercel!](https://booley-bully.vercel.app/)
 
 ### Supported Syntax
 
