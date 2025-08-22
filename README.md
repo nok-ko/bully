@@ -2,6 +2,8 @@
 
 Truth tables for the world!
 
+<img width="745" height="654" alt="image" src="https://github.com/user-attachments/assets/1aac644c-4afa-4d2e-a2c0-0989a3022a54" />
+
 ## What?
 
 This is **Bully**, my little Boolean expression calculator. I’d made [a similar project](https://github.com/nok-ko/boole) in college while studying for a discrete math final, and decided to port my efforts to a TypeScript and React shell while learning a bit more about parsers. (The old one used a couple of regular expressions and `eval()`. _I know._) 
